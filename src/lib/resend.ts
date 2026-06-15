@@ -75,7 +75,7 @@ export async function sendPurchaseEmail({
             </div>
 
             <p style="color: #86868B; font-size: 13px; line-height: 1.6; margin-top: 8px; text-align: center;">
-              You can download your guide up to 10 times. This link expires in 90 days.
+              This link expires in 90 days.
             </p>
             
             <div style="background: #F5F5F7; border-radius: 12px; padding: 20px; margin-top: 32px;">
