@@ -25,14 +25,16 @@
 ## Production Checklist
 
 ### Railway environment variables (on `wholesome-creativity` service)
-- [x] `STRIPE_SECRET_KEY` — live Stripe key
-- [x] `STRIPE_WEBHOOK_SECRET` — `whsec_IHzLOBUoRjbEStmEaIOJOQFumxHzcJNw`
+- [x] `STRIPE_SECRET_KEY` — live Stripe key (set in Railway)
+- [x] `STRIPE_WEBHOOK_SECRET` — webhook signing secret (set in Railway)
 - [x] `NEXT_PUBLIC_APP_URL` — `https://wholesome-creativity-production.up.railway.app`
 - [x] `DATABASE_URL` — internal Postgres URL (`postgres.railway.internal:5432`)
 - [x] `DATABASE_PUBLIC_URL` — public proxy URL (used by Prisma at build time)
-- [x] `CRON_SECRET` — `ahd-cron-7f3a9b2e4d1c`
+- [x] `CRON_SECRET` — random secret for cron endpoint auth (set in Railway)
 - [ ] `RESEND_API_KEY` — get from resend.com after signup
 - [ ] `EMAIL_FROM` — e.g. `hello@synairo.com` (needs domain verification)
+
+> See `.env.example` for full variable descriptions and local dev setup.
 
 ### Stripe dashboard
 - [x] 7 products/prices created
@@ -46,8 +48,8 @@
 
 ### Email retry cron (when ready)
 - [ ] Set up Railway Cron Job or external cron (e.g. cron-job.org):
-  - URL: `GET https://wholesome-creativity-production.up.railway.app/api/cron/check-emails`
-  - Header: `Authorization: Bearer ahd-cron-7f3a9b2e4d1c`
+  - URL: `GET https://<your-domain>/api/cron/check-emails`
+  - Header: `Authorization: Bearer <CRON_SECRET value from Railway env vars>`
   - Schedule: `0 * * * *` (every hour)
   - Purpose: retries unsent purchase confirmation emails (max 10 attempts per purchase)
 
