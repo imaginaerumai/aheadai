@@ -37,7 +37,7 @@ export const PATHS: ProductPath[] = [
         id: "beginner-starter",
         name: "Starter",
         price: 19,
-        stripePriceId: "price_beginner_starter",
+        stripePriceId: "price_1TiTAK4ZC8mn9BJsYDhgIqfV",
         description: "The essentials to get started with real AI development",
         features: [
           "Core guide: From zero to AI-powered workflow",
@@ -51,7 +51,7 @@ export const PATHS: ProductPath[] = [
         id: "beginner-growth",
         name: "Growth",
         price: 39,
-        stripePriceId: "price_beginner_growth",
+        stripePriceId: "price_1TiTAL4ZC8mn9BJsbttOPGDh",
         highlighted: true,
         description: "Triple the examples, triple the confidence",
         features: [
@@ -67,7 +67,7 @@ export const PATHS: ProductPath[] = [
         id: "beginner-complete",
         name: "Complete",
         price: 99,
-        stripePriceId: "price_beginner_complete",
+        stripePriceId: "price_1TiTAL4ZC8mn9BJsk5YSMlrl",
         description: "The full beginner arsenal — nothing held back",
         features: [
           "Everything in Growth",
@@ -90,7 +90,7 @@ export const PATHS: ProductPath[] = [
         id: "principal-starter",
         name: "Starter",
         price: 29,
-        stripePriceId: "price_principal_starter",
+        stripePriceId: "price_1TiTAM4ZC8mn9BJsJGuZSF70",
         description: "Level up from code generation to AI-driven architecture",
         features: [
           "AI-driven development methodology guide",
@@ -104,7 +104,7 @@ export const PATHS: ProductPath[] = [
         id: "principal-growth",
         name: "Growth",
         price: 49,
-        stripePriceId: "price_principal_growth",
+        stripePriceId: "price_1TiTAN4ZC8mn9BJsKoZ4FUqc",
         highlighted: true,
         description: "Deep patterns for AI-augmented engineering",
         features: [
@@ -120,7 +120,7 @@ export const PATHS: ProductPath[] = [
         id: "principal-complete",
         name: "Complete",
         price: 99,
-        stripePriceId: "price_principal_complete",
+        stripePriceId: "price_1TiTAO4ZC8mn9BJsTnRTRXgK",
         description: "The complete principal engineer's AI toolkit",
         features: [
           "Everything in Growth",
@@ -141,7 +141,7 @@ export const BUNDLE: BundleProduct = {
   name: "Complete Bundle",
   tagline: "Both paths. All tiers. Plus exclusive bonus content.",
   price: 129,
-  stripePriceId: "price_complete_bundle",
+  stripePriceId: "price_1TiTAP4ZC8mn9BJsqVAgRNHL",
   description: "The ultimate AI development package",
   features: [
     "Full Beginner Path (all 3 tiers)",
