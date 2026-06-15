@@ -14,20 +14,17 @@ async function createTransport() {
   const transport = nodemailer.createTransport({
     host: SMTP_HOST,
     port: SMTP_PORT,
-    secure: SMTP_PORT === 465, // true for 465 (SSL), false for 587 (STARTTLS)
+    secure: SMTP_PORT === 465,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
     },
     tls: {
-      // Allow connections even if server certificate is expired or self-signed
       rejectUnauthorized: false,
     },
   });
 
-  // Verify connection / auth before sending
   await transport.verify();
-
   return transport;
 }
 
@@ -76,11 +73,21 @@ export async function sendPurchaseEmail({
                 Download Your Guide
               </a>
             </div>
-            
-            <p style="color: #86868B; font-size: 14px; line-height: 1.6; margin-top: 32px;">
-              This download link expires in 7 days. If you need a new link, 
-              contact us at <a href="mailto:contact@synairo.com" style="color: #0071E3;">contact@synairo.com</a>.
+
+            <p style="color: #86868B; font-size: 13px; line-height: 1.6; margin-top: 8px; text-align: center;">
+              You can download your guide up to 10 times. This link expires in 90 days.
             </p>
+            
+            <div style="background: #F5F5F7; border-radius: 12px; padding: 20px; margin-top: 32px;">
+              <p style="color: #1D1D1F; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
+                Download link doesn't work?
+              </p>
+              <p style="color: #86868B; font-size: 13px; line-height: 1.6; margin: 0;">
+                Contact us at <a href="mailto:contact@synairo.com" style="color: #0071E3;">contact@synairo.com</a>. 
+                Make sure to use the email address you used for payment, or include it in your message. 
+                Our team is here to help you!
+              </p>
+            </div>
             
             <hr style="border: none; border-top: 1px solid #E5E5E7; margin: 32px 0;" />
             

@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { getStripe } from "@/lib/stripe";
 import { sendPurchaseEmail } from "@/lib/resend";
 import { prisma } from "@/lib/prisma";
+
+const DOWNLOAD_LIMIT = 10;
+const EXPIRY_DAYS = 90;
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -38,20 +42,26 @@ export async function POST(request: NextRequest) {
     const productName = session.metadata?.productName || "Ahead AI Guide";
     const amountTotal = session.amount_total || 0;
     const currency = session.currency || "usd";
+    const paymentIntent =
+      typeof session.payment_intent === "string"
+        ? session.payment_intent
+        : session.payment_intent?.id || null;
+    const customerId =
+      typeof session.customer === "string"
+        ? session.customer
+        : session.customer?.id || null;
+    const paymentStatus = session.payment_status || "paid";
 
     if (customerEmail && productId) {
-      // Generate download token
+      // Generate unique download token (UUID)
+      const downloadToken = randomUUID();
       const appUrl =
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-      const downloadToken = Buffer.from(
-        JSON.stringify({
-          email: customerEmail,
-          productId,
-          timestamp: Date.now(),
-        })
-      ).toString("base64url");
-
       const downloadUrl = `${appUrl}/api/download?token=${downloadToken}`;
+
+      // Set expiry to 90 days from now
+      const downloadExpiresAt = new Date();
+      downloadExpiresAt.setDate(downloadExpiresAt.getDate() + EXPIRY_DAYS);
 
       // Store purchase in DB
       let purchase;
@@ -66,7 +76,13 @@ export async function POST(request: NextRequest) {
             amountPaid: amountTotal,
             currency,
             stripeSessionId: session.id,
+            stripePaymentIntent: paymentIntent,
+            stripeCustomerId: customerId,
+            paymentStatus,
             downloadToken,
+            downloadCount: 0,
+            downloadLimit: DOWNLOAD_LIMIT,
+            downloadExpiresAt,
             emailSent: false,
             emailAttempts: 0,
           },
@@ -100,7 +116,7 @@ export async function POST(request: NextRequest) {
       }
 
       console.log(
-        `Purchase completed: ${productName} by ${customerEmail} | email=${sent ? "sent" : "pending"}`
+        `Purchase completed: ${productName} by ${customerEmail} | $${(amountTotal / 100).toFixed(2)} ${currency} | email=${sent ? "sent" : "pending"}`
       );
     }
   }

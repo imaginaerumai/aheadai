@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { sendPurchaseEmail } from "@/lib/resend";
 
 const MAX_ATTEMPTS = 10;
+const EXPIRY_DAYS = 90;
 
 export async function GET(request: NextRequest) {
   // Protect with a secret so only Railway cron can call this
@@ -33,22 +35,29 @@ export async function GET(request: NextRequest) {
     }
 
     let sentCount = 0;
-    const results: { id: string; email: string; sent: boolean; error?: string }[] = [];
+    const results: {
+      id: string;
+      email: string;
+      sent: boolean;
+      error?: string;
+    }[] = [];
 
     for (const purchase of pending) {
       const appUrl =
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-      // Regenerate download token with fresh timestamp if original is missing
-      const downloadToken =
-        purchase.downloadToken ||
-        Buffer.from(
-          JSON.stringify({
-            email: purchase.email,
-            productId: purchase.productId,
-            timestamp: Date.now(),
-          })
-        ).toString("base64url");
+      // Generate a new UUID token if missing
+      let downloadToken = purchase.downloadToken;
+      if (!downloadToken) {
+        downloadToken = randomUUID();
+        const downloadExpiresAt = new Date();
+        downloadExpiresAt.setDate(downloadExpiresAt.getDate() + EXPIRY_DAYS);
+
+        await prisma.purchase.update({
+          where: { id: purchase.id },
+          data: { downloadToken, downloadExpiresAt },
+        });
+      }
 
       const downloadUrl = `${appUrl}/api/download?token=${downloadToken}`;
 
@@ -64,7 +73,6 @@ export async function GET(request: NextRequest) {
           emailSent: sent,
           emailAttempts: { increment: 1 },
           emailError: error || null,
-          ...(sent && !purchase.downloadToken ? { downloadToken } : {}),
         },
       });
 

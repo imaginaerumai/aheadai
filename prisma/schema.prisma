@@ -8,21 +8,28 @@ datasource db {
 }
 
 model Purchase {
-  id              String   @id @default(cuid())
-  email           String
-  productId       String
-  productName     String?
-  amountPaid      Int      // cents
-  currency        String   @default("usd")
-  stripeSessionId String   @unique
-  downloadToken   String?
-  emailSent       Boolean  @default(false)
-  emailAttempts   Int      @default(0)
-  emailError      String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  email                String
+  productId            String
+  productName          String?
+  amountPaid           Int      // cents
+  currency             String   @default("usd")
+  stripeSessionId      String   @unique
+  stripePaymentIntent  String?
+  stripeCustomerId     String?
+  paymentStatus        String   @default("paid") // paid, unpaid, refunded
+  downloadToken        String?  @unique           // UUID v4, used in download URL
+  downloadCount        Int      @default(0)
+  downloadLimit        Int      @default(10)
+  downloadExpiresAt    DateTime?                  // 90 days from purchase
+  emailSent            Boolean  @default(false)
+  emailAttempts        Int      @default(0)
+  emailError           String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   @@index([email])
   @@index([emailSent])
   @@index([stripeSessionId])
+  @@index([downloadToken])
 }
