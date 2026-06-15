@@ -1,12 +1,33 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
-const resend = process.env.RESEND_API_KEY
-  ? new Resend(process.env.RESEND_API_KEY)
-  : null;
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = parseInt(process.env.SMTP_PORT || "587", 10);
+const SMTP_USER = process.env.SMTP_USER;
+const SMTP_PASS = process.env.SMTP_PASS;
+const EMAIL_FROM = process.env.EMAIL_FROM || "noreply@synairo.com";
 
-const emailFrom = process.env.EMAIL_FROM || "hello@aheadai.dev";
+/**
+ * Creates a fresh SMTP transport and verifies auth before returning.
+ * Each send gets its own connection to avoid stale/expired sessions.
+ */
+async function createTransport() {
+  const transport = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465, // true for 465 (SSL), false for 587 (STARTTLS)
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  });
 
-/** Returns true if email was sent, false otherwise. Throws on unexpected errors. */
+  // Verify connection / auth before sending
+  await transport.verify();
+
+  return transport;
+}
+
+/** Returns true if email was sent, false otherwise. */
 export async function sendPurchaseEmail({
   to,
   productName,
@@ -16,17 +37,19 @@ export async function sendPurchaseEmail({
   productName: string;
   downloadUrl: string;
 }): Promise<{ sent: boolean; error?: string }> {
-  if (!resend) {
-    console.warn("RESEND_API_KEY not set. Skipping email send.");
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+    console.warn("SMTP not configured. Skipping email send.");
     console.log(
       `Would have sent email to ${to} with download link: ${downloadUrl}`
     );
-    return { sent: false, error: "RESEND_API_KEY not configured" };
+    return { sent: false, error: "SMTP not configured" };
   }
 
   try {
-    await resend.emails.send({
-      from: emailFrom,
+    const transport = await createTransport();
+
+    await transport.sendMail({
+      from: `"Ahead AI" <${EMAIL_FROM}>`,
       to,
       subject: `Your Ahead AI Guide: ${productName}`,
       html: `
@@ -34,7 +57,7 @@ export async function sendPurchaseEmail({
         <html>
           <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1D1D1F;">
             <div style="text-align: center; margin-bottom: 40px;">
-              <h1 style="font-size: 24px; font-weight: 700;">Ahead <span style="background: linear-gradient(135deg, #0071E3, #7C3AED); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AI</span></h1>
+              <h1 style="font-size: 24px; font-weight: 700;">Ahead <span style="color: #0071E3;">AI</span></h1>
             </div>
             
             <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Thank you for your purchase!</h2>
@@ -44,9 +67,11 @@ export async function sendPurchaseEmail({
               Your guide is ready for download.
             </p>
             
-            <a href="${downloadUrl}" style="display: inline-block; background: #0071E3; color: white; text-decoration: none; padding: 14px 32px; border-radius: 99px; font-weight: 500; font-size: 16px; margin-bottom: 24px;">
-              Download Your Guide
-            </a>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="${downloadUrl}" style="display: inline-block; background: #0071E3; color: white; text-decoration: none; padding: 14px 32px; border-radius: 99px; font-weight: 500; font-size: 16px;">
+                Download Your Guide
+              </a>
+            </div>
             
             <p style="color: #86868B; font-size: 14px; line-height: 1.6; margin-top: 32px;">
               This download link expires in 7 days. If you need a new link, 
@@ -62,6 +87,8 @@ export async function sendPurchaseEmail({
         </html>
       `,
     });
+
+    transport.close();
     console.log(`Purchase email sent to ${to}`);
     return { sent: true };
   } catch (error) {
