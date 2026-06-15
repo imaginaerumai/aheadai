@@ -4,16 +4,64 @@
 - [x] Landing page with Apple-like design
 - [x] Two paths: Beginner + Principal Engineer
 - [x] 7 product SKUs (3 tiers per path + Complete Bundle)
-- [x] Stripe Checkout integration
+- [x] Stripe Checkout integration (live keys wired)
 - [x] Success page with download link
-- [x] Email delivery via Resend
+- [x] Email delivery via Resend (code ready, needs API key)
 - [x] SEO metadata (OpenGraph, Twitter cards)
 - [x] Dark mode support
 - [x] Responsive design
-- [ ] Create Stripe products/prices in dashboard
+- [x] Stripe products/prices created (7 live price IDs)
+- [x] Promo code: `TESTMANGOMUSZTARDA67` (100% off, 10 uses)
+- [x] Non-refundable policy in FAQ
+- [x] Footer: Synairo copyright + contact@synairo.com
+- [x] Test PDF download working (`public/guides/aheadai-sample.pdf`)
+- [x] Purchase tracking DB (Prisma + Railway Postgres)
+- [x] Webhook saves purchases + tracks email delivery
+- [x] Hourly email retry endpoint (`/api/cron/check-emails`)
 - [ ] Create actual PDF guide content
-- [ ] Set up Resend account + verify domain
-- [ ] Custom domain setup
+- [ ] Set up Resend account + verify `synairo.com` domain
+- [ ] Custom domain setup (e.g. aheadai.dev)
+
+## Production Checklist
+
+### Railway environment variables (on `wholesome-creativity` service)
+- [x] `STRIPE_SECRET_KEY` — live Stripe key
+- [x] `STRIPE_WEBHOOK_SECRET` — `whsec_IHzLOBUoRjbEStmEaIOJOQFumxHzcJNw`
+- [x] `NEXT_PUBLIC_APP_URL` — `https://wholesome-creativity-production.up.railway.app`
+- [x] `DATABASE_URL` — internal Postgres URL (`postgres.railway.internal:5432`)
+- [x] `DATABASE_PUBLIC_URL` — public proxy URL (used by Prisma at build time)
+- [x] `CRON_SECRET` — `ahd-cron-7f3a9b2e4d1c`
+- [ ] `RESEND_API_KEY` — get from resend.com after signup
+- [ ] `EMAIL_FROM` — e.g. `hello@synairo.com` (needs domain verification)
+
+### Stripe dashboard
+- [x] 7 products/prices created
+- [x] Webhook endpoint → `https://wholesome-creativity-production.up.railway.app/api/webhook`
+- [x] Webhook event: `checkout.session.completed`
+- [x] Promo codes enabled on checkout
+
+### Database
+- [x] Railway Postgres service added to project
+- [ ] Verify `Purchase` table created (first deploy with `prisma db push` will create it)
+
+### Email retry cron (when ready)
+- [ ] Set up Railway Cron Job or external cron (e.g. cron-job.org):
+  - URL: `GET https://wholesome-creativity-production.up.railway.app/api/cron/check-emails`
+  - Header: `Authorization: Bearer ahd-cron-7f3a9b2e4d1c`
+  - Schedule: `0 * * * *` (every hour)
+  - Purpose: retries unsent purchase confirmation emails (max 10 attempts per purchase)
+
+### DNS / Domain
+- [ ] Register or configure custom domain (e.g. aheadai.dev)
+- [ ] Add domain to Railway service
+- [ ] Update `NEXT_PUBLIC_APP_URL` to custom domain
+- [ ] Update Stripe webhook URL to custom domain
+- [ ] Verify domain with email provider (Resend/SendGrid) for `@synairo.com` sends
+
+### Content
+- [ ] Replace `public/guides/aheadai-sample.pdf` with real guide PDFs
+- [ ] Create per-product PDF files and update `PRODUCT_FILES` map in `src/app/api/download/route.ts`
+- [ ] Consider S3/R2 for file hosting if PDFs are large
 
 ## v2 — AI Chat Support
 - [ ] User authentication (email + OAuth)
