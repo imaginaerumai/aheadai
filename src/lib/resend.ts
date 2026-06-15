@@ -19,6 +19,10 @@ async function createTransport() {
       user: SMTP_USER,
       pass: SMTP_PASS,
     },
+    tls: {
+      // Allow connections even if server certificate is expired or self-signed
+      rejectUnauthorized: false,
+    },
   });
 
   // Verify connection / auth before sending
