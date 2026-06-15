@@ -19,9 +19,9 @@ const faqs = [
       "No. This is a hands-on, practical guide with real worked examples. Every technique is battle-tested in production environments. We cover tools, workflows, architecture, cost optimization — not just how to write prompts.",
   },
   {
-    question: "What if I'm not satisfied?",
+    question: "What is the refund policy?",
     answer:
-      "We offer a 30-day money-back guarantee, no questions asked. If the guide doesn't deliver value, we'll refund you in full.",
+      "All sales are final. Due to the digital nature of this product, purchases are non-refundable. We encourage you to review the product details and tier descriptions carefully before purchasing to ensure it's the right fit for you.",
   },
   {
     question: "Will the content be updated?",

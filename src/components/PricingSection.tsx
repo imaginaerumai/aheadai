@@ -80,9 +80,9 @@ export default function PricingSection() {
           </div>
         )}
 
-        {/* Money-back guarantee */}
+        {/* Refund policy */}
         <p className="text-center text-muted text-sm mt-12">
-          🛡️ 30-day money-back guarantee. No questions asked.
+          All sales are final. Due to the digital nature of this product, purchases are non-refundable.
         </p>
       </div>
     </section>
