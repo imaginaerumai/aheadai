@@ -1,4 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { readFile } from "fs/promises";
+import { join } from "path";
+
+// Map product IDs to PDF files
+// For now, all products serve the same test PDF
+// Replace with individual files per product when content is ready
+const PRODUCT_FILES: Record<string, string> = {
+  "beginner-starter": "aheadai-sample.pdf",
+  "beginner-growth": "aheadai-sample.pdf",
+  "beginner-complete": "aheadai-sample.pdf",
+  "principal-starter": "aheadai-sample.pdf",
+  "principal-growth": "aheadai-sample.pdf",
+  "principal-complete": "aheadai-sample.pdf",
+  "complete-bundle": "aheadai-sample.pdf",
+};
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
@@ -21,25 +36,44 @@ export async function GET(request: NextRequest) {
     const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
     if (Date.now() - timestamp > SEVEN_DAYS) {
       return NextResponse.json(
-        { error: "Download link has expired. Please contact support for a new link." },
+        {
+          error:
+            "Download link has expired. Please contact support for a new link.",
+        },
         { status: 410 }
       );
     }
 
-    // In production, you would:
-    // 1. Look up the file in S3/R2 based on productId
-    // 2. Generate a signed URL or stream the file
-    // 3. Log the download
+    const filename = PRODUCT_FILES[productId];
+    if (!filename) {
+      return NextResponse.json(
+        { error: "Product not found" },
+        { status: 404 }
+      );
+    }
 
-    // For v1 placeholder:
-    console.log(`📥 Download requested: ${productId} by ${email}`);
+    const filePath = join(process.cwd(), "public", "guides", filename);
 
-    return NextResponse.json({
-      message: "Download endpoint ready. PDF files will be served here once content is created.",
-      productId,
-      email,
-      note: "Replace this with actual file serving when PDFs are ready.",
-    });
+    try {
+      const fileBuffer = await readFile(filePath);
+
+      console.log(`Download: ${productId} by ${email}`);
+
+      return new NextResponse(fileBuffer, {
+        headers: {
+          "Content-Type": "application/pdf",
+          "Content-Disposition": `attachment; filename="AheadAI-${productId}.pdf"`,
+          "Content-Length": fileBuffer.length.toString(),
+        },
+      });
+    } catch {
+      return NextResponse.json(
+        {
+          error: "Guide file not found. Please contact support.",
+        },
+        { status: 404 }
+      );
+    }
   } catch {
     return NextResponse.json(
       { error: "Invalid download token" },

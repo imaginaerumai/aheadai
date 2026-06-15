@@ -21,7 +21,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-card-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted">
-          <p>&copy; {new Date().getFullYear()} Ahead AI. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Synairo. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a href="/privacy" className="hover:text-foreground transition-colors">
               Privacy Policy
