@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Purchase {
+  id              String   @id @default(cuid())
+  email           String
+  productId       String
+  productName     String?
+  amountPaid      Int      // cents
+  currency        String   @default("usd")
+  stripeSessionId String   @unique
+  downloadToken   String?
+  emailSent       Boolean  @default(false)
+  emailAttempts   Int      @default(0)
+  emailError      String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([email])
+  @@index([emailSent])
+  @@index([stripeSessionId])
+}

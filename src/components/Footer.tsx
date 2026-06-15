@@ -17,12 +17,19 @@ export default function Footer() {
             <a href="#faq" className="hover:text-foreground transition-colors">
               FAQ
             </a>
+            <a href="mailto:contact@synairo.com" className="hover:text-foreground transition-colors">
+              Contact
+            </a>
           </div>
         </div>
 
         <div className="border-t border-card-border pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted">
           <p>&copy; {new Date().getFullYear()} Synairo. All rights reserved.</p>
           <div className="flex items-center gap-4">
+            <a href="mailto:contact@synairo.com" className="hover:text-foreground transition-colors">
+              contact@synairo.com
+            </a>
+            <span className="text-card-border">|</span>
             <a href="/privacy" className="hover:text-foreground transition-colors">
               Privacy Policy
             </a>

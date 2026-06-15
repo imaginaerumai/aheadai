@@ -21,7 +21,7 @@ const faqs = [
   {
     question: "What is the refund policy?",
     answer:
-      "All sales are final. Due to the digital nature of this product, purchases are non-refundable. We encourage you to review the product details and tier descriptions carefully before purchasing to ensure it's the right fit for you.",
+      "All sales are final. Due to the digital nature of this product, purchases are non-refundable. We encourage you to review the product details and tier descriptions carefully before purchasing to ensure it's the right fit for you. If you experience any issues, reach out to us at contact@synairo.com.",
   },
   {
     question: "Will the content be updated?",
@@ -32,6 +32,11 @@ const faqs = [
     question: "What's the difference between the tiers within each path?",
     answer:
       "Each tier builds on the previous one. Starter gives you the core guide with 2 examples. Growth triples that with 6 examples and expanded tool coverage. Complete gives you everything — 12+ examples, advanced optimization techniques, and bonus content.",
+  },
+  {
+    question: "I have a problem with my purchase. How can I get help?",
+    answer:
+      "Contact us at contact@synairo.com and we'll get back to you as soon as possible. Please include your purchase email and a description of the issue.",
   },
 ];
 

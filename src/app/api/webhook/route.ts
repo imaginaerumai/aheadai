@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { sendPurchaseEmail } from "@/lib/resend";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -35,12 +36,13 @@ export async function POST(request: NextRequest) {
     const customerEmail = session.customer_details?.email;
     const productId = session.metadata?.productId;
     const productName = session.metadata?.productName || "Ahead AI Guide";
+    const amountTotal = session.amount_total || 0;
+    const currency = session.currency || "usd";
 
     if (customerEmail && productId) {
-      // Generate a download URL
-      // In production, this would be a signed URL to a file in S3/R2
-      // For now, we use a placeholder that you'll replace with real file hosting
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      // Generate download token
+      const appUrl =
+        process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const downloadToken = Buffer.from(
         JSON.stringify({
           email: customerEmail,
@@ -51,14 +53,54 @@ export async function POST(request: NextRequest) {
 
       const downloadUrl = `${appUrl}/api/download?token=${downloadToken}`;
 
-      await sendPurchaseEmail({
+      // Store purchase in DB
+      let purchase;
+      try {
+        purchase = await prisma.purchase.upsert({
+          where: { stripeSessionId: session.id },
+          update: {},
+          create: {
+            email: customerEmail,
+            productId,
+            productName,
+            amountPaid: amountTotal,
+            currency,
+            stripeSessionId: session.id,
+            downloadToken,
+            emailSent: false,
+            emailAttempts: 0,
+          },
+        });
+      } catch (dbError) {
+        console.error("DB error saving purchase:", dbError);
+        // Don't fail the webhook — Stripe will retry
+      }
+
+      // Attempt to send email
+      const { sent, error } = await sendPurchaseEmail({
         to: customerEmail,
         productName,
         downloadUrl,
       });
 
+      // Update email status in DB
+      if (purchase) {
+        try {
+          await prisma.purchase.update({
+            where: { id: purchase.id },
+            data: {
+              emailSent: sent,
+              emailAttempts: 1,
+              emailError: error || null,
+            },
+          });
+        } catch (dbError) {
+          console.error("DB error updating email status:", dbError);
+        }
+      }
+
       console.log(
-        `✅ Purchase completed: ${productName} by ${customerEmail}`
+        `Purchase completed: ${productName} by ${customerEmail} | email=${sent ? "sent" : "pending"}`
       );
     }
   }
