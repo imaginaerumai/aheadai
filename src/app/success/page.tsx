@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 interface SessionData {
@@ -14,6 +14,50 @@ function SuccessContent() {
   const sessionId = searchParams.get("session_id");
   const [session, setSession] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPurchase = useCallback(
+    async (attempt: number): Promise<boolean> => {
+      try {
+        const res = await fetch(
+          `/api/purchase-status?session_id=${sessionId}`
+        );
+        const data = await res.json();
+
+        if (data.ready) {
+          setSession({
+            productName: data.productName,
+            customerEmail: data.customerEmail,
+            downloadUrl: data.downloadUrl,
+          });
+          setLoading(false);
+          return true;
+        }
+
+        // Not ready yet — webhook hasn't fired
+        if (attempt >= 10) {
+          // Give up after ~15 seconds
+          setError(
+            "Your purchase is being processed. Check your email for a download link — it should arrive within a few minutes."
+          );
+          setLoading(false);
+          return true;
+        }
+
+        return false;
+      } catch {
+        if (attempt >= 10) {
+          setError(
+            "Something went wrong loading your download. Check your email for a download link, or contact us at contact@synairo.com."
+          );
+          setLoading(false);
+          return true;
+        }
+        return false;
+      }
+    },
+    [sessionId]
+  );
 
   useEffect(() => {
     if (!sessionId) {
@@ -21,20 +65,33 @@ function SuccessContent() {
       return;
     }
 
-    // For v1, we show a generic success message
-    // In production, you'd verify the session with Stripe
-    setSession({
-      productName: "Ahead AI Guide",
-      customerEmail: "",
-      downloadUrl: "#",
-    });
-    setLoading(false);
-  }, [sessionId]);
+    let cancelled = false;
+    let attempt = 0;
+
+    const poll = async () => {
+      while (!cancelled) {
+        attempt++;
+        const done = await fetchPurchase(attempt);
+        if (done || cancelled) break;
+        // Wait 1.5s before retrying (webhook may still be processing)
+        await new Promise((r) => setTimeout(r, 1500));
+      }
+    };
+
+    poll();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionId, fetchPurchase]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
+        <div className="text-center">
+          <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-muted text-sm">Preparing your download...</p>
+        </div>
       </div>
     );
   }
@@ -88,6 +145,12 @@ function SuccessContent() {
           email. You can also download it directly below.
         </p>
 
+        {error && (
+          <div className="bg-card-bg border border-card-border rounded-2xl p-8 mb-8">
+            <p className="text-muted leading-relaxed">{error}</p>
+          </div>
+        )}
+
         {session && (
           <div className="bg-card-bg border border-card-border rounded-2xl p-8 mb-8">
             <p className="text-sm text-muted mb-2">You purchased</p>
@@ -107,7 +170,7 @@ function SuccessContent() {
         <p className="text-sm text-muted mb-4">
           A download link has also been sent to your email.
           <br />
-          The link expires in 7 days.
+          The link expires in 90 days.
         </p>
 
         <a
