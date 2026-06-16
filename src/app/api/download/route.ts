@@ -19,14 +19,66 @@ const PRODUCT_FILES: Record<string, string[]> = {
 
 const GUIDES_DIR = join(process.cwd(), "guides-private");
 
+function errorPage(title: string, message: string, status: number) {
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${title} — Ahead AI</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #000; color: #f5f5f7;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 480px; width: 100%; text-align: center;
+      background: #1c1c1e; border: 1px solid #2c2c2e; border-radius: 20px;
+      padding: 48px 32px;
+    }
+    .icon { font-size: 48px; margin-bottom: 20px; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+    p { color: #86868b; font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+    .contact {
+      display: inline-block; background: #0071e3; color: #fff;
+      text-decoration: none; padding: 12px 28px; border-radius: 99px;
+      font-weight: 500; font-size: 15px; transition: background 0.2s;
+    }
+    .contact:hover { background: #0077ed; }
+    .note { color: #6e6e73; font-size: 13px; margin-top: 20px; line-height: 1.6; }
+    .logo { color: #86868b; font-size: 13px; margin-top: 32px; }
+    .logo span { color: #0071e3; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">${status === 410 ? "⏰" : status === 429 ? "🔒" : "⚠️"}</div>
+    <h1>${title}</h1>
+    <p>${message}</p>
+    <a href="mailto:contact@synairo.com" class="contact">Contact Support</a>
+    <p class="note">
+      Make sure to use the email address you used for payment,
+      or include it in your message. Our team is here to help you!
+    </p>
+    <p class="logo">Ahead <span>AI</span></p>
+  </div>
+</body>
+</html>`;
+
+  return new NextResponse(html, {
+    status,
+    headers: { "Content-Type": "text/html; charset=utf-8" },
+  });
+}
+
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token");
 
   if (!token) {
-    return NextResponse.json(
-      { error: "Download token is required" },
-      { status: 400 }
-    );
+    return errorPage("Invalid Link", "This download link is not valid.", 400);
   }
 
   // Look up purchase by UUID token
@@ -35,39 +87,38 @@ export async function GET(request: NextRequest) {
   });
 
   if (!purchase) {
-    return NextResponse.json(
-      { error: "Invalid download link." },
-      { status: 404 }
+    return errorPage(
+      "Link Not Found",
+      "This download link doesn't exist or has been revoked.",
+      404
     );
   }
 
   // Check expiry (90 days)
   if (purchase.downloadExpiresAt && new Date() > purchase.downloadExpiresAt) {
-    return NextResponse.json(
-      {
-        error:
-          "Download link has expired. Contact us at contact@synairo.com with your purchase email and we'll send you a new link.",
-      },
-      { status: 410 }
+    return errorPage(
+      "Link Expired",
+      "This download link has expired. Contact us and we'll send you a new one.",
+      410
     );
   }
 
-  // Check download limit
-  if (purchase.downloadCount >= purchase.downloadLimit) {
-    return NextResponse.json(
-      {
-        error:
-          "Download limit reached. Contact us at contact@synairo.com with your purchase email for assistance.",
-      },
-      { status: 429 }
+  // Check download limit (env var, default 15)
+  const limit = purchase.downloadLimit;
+  if (purchase.downloadCount >= limit) {
+    return errorPage(
+      "Download Limit Reached",
+      "This download link has reached its maximum number of uses. Contact us and we'll sort it out.",
+      429
     );
   }
 
   const files = PRODUCT_FILES[purchase.productId];
   if (!files || files.length === 0) {
-    return NextResponse.json(
-      { error: "Product files not found. Contact support." },
-      { status: 404 }
+    return errorPage(
+      "File Not Available",
+      "The guide files for this product are not yet available. Contact us for assistance.",
+      404
     );
   }
 
@@ -76,9 +127,10 @@ export async function GET(request: NextRequest) {
     try {
       await access(join(GUIDES_DIR, file));
     } catch {
-      return NextResponse.json(
-        { error: "Guide file not available. Contact support." },
-        { status: 404 }
+      return errorPage(
+        "File Not Available",
+        "The guide file could not be found on our server. Contact us and we'll resolve this.",
+        404
       );
     }
   }
@@ -89,7 +141,7 @@ export async function GET(request: NextRequest) {
     data: { downloadCount: { increment: 1 } },
   });
 
-  const remaining = purchase.downloadLimit - purchase.downloadCount - 1;
+  const remaining = limit - purchase.downloadCount - 1;
   console.log(
     `Download: ${purchase.productId} by ${purchase.email} (${remaining} remaining)`
   );

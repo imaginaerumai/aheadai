@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { sendPurchaseEmail } from "@/lib/resend";
 
 const MAX_ATTEMPTS = 10;
-const EXPIRY_DAYS = 90;
+const EXPIRY_DAYS = parseInt(process.env.DOWNLOAD_EXPIRY_DAYS || "90", 10);
 
 export async function GET(request: NextRequest) {
   // Protect with a secret so only Railway cron can call this

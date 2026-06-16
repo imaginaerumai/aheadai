@@ -4,8 +4,9 @@ import { getStripe } from "@/lib/stripe";
 import { sendPurchaseEmail } from "@/lib/resend";
 import { prisma } from "@/lib/prisma";
 
-const DOWNLOAD_LIMIT = 10;
-const EXPIRY_DAYS = 90;
+// Configurable via env var — change DOWNLOAD_LIMIT in Railway to adjust
+const DOWNLOAD_LIMIT = parseInt(process.env.DOWNLOAD_LIMIT || "15", 10);
+const EXPIRY_DAYS = parseInt(process.env.DOWNLOAD_EXPIRY_DAYS || "90", 10);
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
