@@ -14,14 +14,14 @@ export default function PathsOverview() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
-          {/* Beginner Path */}
+          {/* Essentials */}
           <div className="bg-card-bg border border-card-border rounded-2xl p-10 hover:border-primary/30 transition-all duration-300 group">
             <div className="text-5xl mb-6">🚀</div>
-            <h3 className="text-2xl font-bold mb-3">Beginner Path</h3>
+            <h3 className="text-2xl font-bold mb-3">Essentials</h3>
             <p className="text-muted leading-relaxed mb-6">
-              You&apos;ve used ChatGPT but you&apos;re still copy-pasting responses.
-              This path takes you from zero to confidently building with AI
-              — the right tools, the right techniques, real results.
+              Everything you need to build with AI, nothing you don&apos;t.
+              The right tools, the right techniques, real results
+              — from first prompt to confident builder.
             </p>
             <div className="text-sm text-muted mb-6">
               Starting at <span className="text-foreground font-semibold">$19</span>
@@ -34,14 +34,14 @@ export default function PathsOverview() {
             </a>
           </div>
 
-          {/* Principal Engineer Path */}
+          {/* Frontier */}
           <div className="bg-card-bg border border-card-border rounded-2xl p-10 hover:border-primary/30 transition-all duration-300 group">
             <div className="text-5xl mb-6">⚡</div>
-            <h3 className="text-2xl font-bold mb-3">Principal Engineer Path</h3>
+            <h3 className="text-2xl font-bold mb-3">Frontier</h3>
             <p className="text-muted leading-relaxed mb-6">
-              You already code. You want AI-driven development with proper
-              reasoning, analysis, context management, and Jira integration
-              — not just autocomplete on steroids.
+              You already build with AI. Now go further — reasoning,
+              architecture, context management, and agentic workflows
+              that put you ahead of everyone else.
             </p>
             <div className="text-sm text-muted mb-6">
               Starting at <span className="text-foreground font-semibold">$29</span>
@@ -60,7 +60,7 @@ export default function PathsOverview() {
           <p className="text-muted text-sm">
             Want everything?{" "}
             <a href="#pricing" className="text-primary font-medium hover:underline">
-              Get the Complete Bundle for $129
+              Get the Premium Pack for $129
             </a>{" "}
             and save $69.
           </p>

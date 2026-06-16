@@ -5,9 +5,9 @@ import { PATHS, BUNDLE } from "@/lib/products";
 import PricingCard from "./PricingCard";
 
 const tabs = [
-  { id: "beginner", label: "Beginner Path" },
-  { id: "principal", label: "Principal Engineer" },
-  { id: "bundle", label: "Complete Bundle" },
+  { id: "beginner", label: "Essentials" },
+  { id: "principal", label: "Frontier" },
+  { id: "bundle", label: "Premium Pack" },
 ];
 
 export default function PricingSection() {

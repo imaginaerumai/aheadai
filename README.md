@@ -20,9 +20,9 @@ Premium AI development guide PDFs sold via Stripe checkout. Built with Next.js, 
 
 | Path | Starter | Growth | Complete |
 |------|---------|--------|----------|
-| Beginner | $19 | $39 | $99 |
-| Principal Engineer | $29 | $49 | $99 |
-| **Complete Bundle** | | | **$129** |
+| Essentials | $19 | $39 | $99 |
+| Frontier | $29 | $49 | $99 |
+| **Premium Pack** | | | **$129** |
 
 All prices have live Stripe price IDs configured in `src/lib/products.ts`.
 
@@ -45,9 +45,9 @@ src/
   components/
     Navbar.tsx                  # Fixed nav with scroll effect
     Hero.tsx                    # Hero section with CTA
-    PathsOverview.tsx           # Beginner vs Principal path comparison
+    PathsOverview.tsx           # Essentials vs Frontier path comparison
     Features.tsx                # Feature highlights
-    PricingSection.tsx          # Tabbed pricing (Beginner | Principal | Bundle)
+    PricingSection.tsx          # Tabbed pricing (Essentials | Frontier | Premium Pack)
     PricingCard.tsx             # Individual pricing tier card
     FAQ.tsx                     # Accordion FAQ (includes refund policy)
     Footer.tsx                  # Footer with Synairo copyright + contact

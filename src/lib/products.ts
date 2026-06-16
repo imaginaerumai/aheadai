@@ -29,8 +29,8 @@ export interface BundleProduct {
 export const PATHS: ProductPath[] = [
   {
     id: "beginner",
-    name: "Beginner Path",
-    tagline: "From ChatGPT copy-paste to confident AI builder",
+    name: "Essentials",
+    tagline: "Everything you need to build with AI, nothing you don't",
     icon: "🚀",
     tiers: [
       {
@@ -82,8 +82,8 @@ export const PATHS: ProductPath[] = [
   },
   {
     id: "principal",
-    name: "Principal Engineer Path",
-    tagline: "AI-driven development for experienced builders",
+    name: "Frontier",
+    tagline: "Advanced patterns that change how you build. No going back.",
     icon: "⚡",
     tiers: [
       {
@@ -138,14 +138,14 @@ export const PATHS: ProductPath[] = [
 
 export const BUNDLE: BundleProduct = {
   id: "complete-bundle",
-  name: "Complete Bundle",
-  tagline: "Both paths. All tiers. Plus exclusive bonus content.",
+  name: "Premium Pack",
+  tagline: "Every guide. Every technique. One price.",
   price: 129,
   stripePriceId: "price_1TiTAP4ZC8mn9BJsqVAgRNHL",
   description: "The ultimate AI development package",
   features: [
-    "Full Beginner Path (all 3 tiers)",
-    "Full Principal Engineer Path (all 3 tiers)",
+    "Full Essentials path (all 3 tiers)",
+    "Full Frontier path (all 3 tiers)",
     "24+ worked examples with source code",
     "Exclusive: Advanced token optimization playbook",
     "Exclusive: Cost-saving strategies that pay for themselves",
