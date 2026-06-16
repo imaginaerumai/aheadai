@@ -49,7 +49,13 @@ function errorPage(title: string, message: string, status: number) {
     }
     .contact:hover { background: #0077ed; }
     .note { color: #6e6e73; font-size: 13px; margin-top: 20px; line-height: 1.6; }
-    .logo { color: #86868b; font-size: 13px; margin-top: 32px; }
+    .back {
+      display: inline-block; color: #0071e3; text-decoration: none;
+      font-size: 14px; font-weight: 500; margin-top: 24px;
+      transition: color 0.2s;
+    }
+    .back:hover { color: #0077ed; }
+    .logo { color: #86868b; font-size: 13px; margin-top: 24px; }
     .logo span { color: #0071e3; }
   </style>
 </head>
@@ -63,6 +69,7 @@ function errorPage(title: string, message: string, status: number) {
       Make sure to use the email address you used for payment,
       or include it in your message. Our team is here to help you!
     </p>
+    <a href="/" class="back">← Back to Home</a>
     <p class="logo">Ahead <span>AI</span></p>
   </div>
 </body>
