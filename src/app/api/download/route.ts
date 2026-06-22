@@ -5,10 +5,9 @@ import { prisma } from "@/lib/prisma";
 import JSZip from "jszip";
 
 // Map product IDs to PDF files in guides-private/
-// For now all products use the same test PDF — replace with real files
 const PRODUCT_FILES: Record<string, string[]> = {
-  "beginner-starter": ["aheadai-sample.pdf"],
-  "principal-starter": ["aheadai-sample.pdf"],
+  "beginner-starter": ["essentials.pdf"],
+  "principal-starter": ["frontier.pdf"],
 };
 
 const GUIDES_DIR = join(process.cwd(), "guides-private");

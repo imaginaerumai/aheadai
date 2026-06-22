@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "prisma generate && prisma db push --accept-data-loss && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "guide:build": "tsx scripts/build-pdf.ts",
+    "guide:screenshots": "tsx scripts/capture-screenshots.ts",
+    "guide:pipeline": "tsx scripts/capture-screenshots.ts --guide $npm_config_guide && tsx scripts/build-pdf.ts --guide $npm_config_guide --preview"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -24,12 +27,19 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.2.0",
+    "markdown-it-highlightjs": "^4.3.0",
+    "playwright": "^1.61.0",
+    "puppeteer": "^25.2.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.4",
     "typescript": "^5"
   }
 }
