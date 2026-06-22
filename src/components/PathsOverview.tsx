@@ -4,7 +4,7 @@ export default function PathsOverview() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-primary font-medium text-sm tracking-wide uppercase mb-4">
-            Two Paths, One Goal
+            Two Guides, One Goal
           </p>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
             Pick where you are.
@@ -13,7 +13,7 @@ export default function PathsOverview() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {/* Essentials */}
           <div className="bg-card-bg border border-card-border rounded-2xl p-10 hover:border-primary/30 transition-all duration-300 group">
             <div className="text-5xl mb-6">🚀</div>
@@ -21,16 +21,16 @@ export default function PathsOverview() {
             <p className="text-muted leading-relaxed mb-6">
               Everything you need to build with AI, nothing you don&apos;t.
               The right tools, the right techniques, real results
-              — from first prompt to confident builder.
+              - from first prompt to confident builder.
             </p>
             <div className="text-sm text-muted mb-6">
-              Starting at <span className="text-foreground font-semibold">$19</span>
+              <span className="text-foreground font-semibold">$19</span> one-time
             </div>
             <a
               href="#pricing"
               className="text-primary font-medium text-sm group-hover:underline"
             >
-              See tiers →
+              Get started →
             </a>
           </div>
 
@@ -39,31 +39,20 @@ export default function PathsOverview() {
             <div className="text-5xl mb-6">⚡</div>
             <h3 className="text-2xl font-bold mb-3">Frontier</h3>
             <p className="text-muted leading-relaxed mb-6">
-              You already build with AI. Now go further — reasoning,
+              You already build with AI. Now go further: reasoning,
               architecture, context management, and agentic workflows
               that put you ahead of everyone else.
             </p>
             <div className="text-sm text-muted mb-6">
-              Starting at <span className="text-foreground font-semibold">$29</span>
+              <span className="text-foreground font-semibold">$29</span> one-time
             </div>
             <a
               href="#pricing"
               className="text-primary font-medium text-sm group-hover:underline"
             >
-              See tiers →
+              Get started →
             </a>
           </div>
-        </div>
-
-        {/* Bundle teaser */}
-        <div className="text-center">
-          <p className="text-muted text-sm">
-            Want everything?{" "}
-            <a href="#pricing" className="text-primary font-medium hover:underline">
-              Get the Premium Pack for $129
-            </a>{" "}
-            and save $69.
-          </p>
         </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ const faqs = [
   {
     question: "Who is this guide for?",
     answer:
-      "We have two paths: The Beginner Path is for anyone who has used ChatGPT but wants to go beyond copy-pasting — you'll learn the tools, techniques, and mindset to multiply your productivity. The Principal Engineer Path is for experienced developers who want to integrate AI into their professional workflow with proper reasoning, analysis, and tooling.",
+      "We have two guides: Essentials is for anyone who has used ChatGPT but wants to go beyond copy-pasting. You'll learn the tools, techniques, and mindset to multiply your productivity. Frontier is for experienced developers who want to integrate AI into their professional workflow with proper reasoning, analysis, and tooling.",
   },
   {
     question: "What format is the content delivered in?",
@@ -16,12 +16,12 @@ const faqs = [
   {
     question: "Is this just another prompt engineering course?",
     answer:
-      "No. This is a hands-on, practical guide with real worked examples. Every technique is battle-tested in production environments. We cover tools, workflows, architecture, cost optimization — not just how to write prompts.",
+      "No. This is a hands-on, practical guide with real worked examples. Every technique is battle-tested in production environments. We cover tools, workflows, architecture, cost optimization. Not just how to write prompts.",
   },
   {
     question: "What is the refund policy?",
     answer:
-      "All sales are final. Due to the digital nature of this product, purchases are non-refundable. We encourage you to review the product details and tier descriptions carefully before purchasing to ensure it's the right fit for you. If you experience any issues, reach out to us at contact@synairo.com.",
+      "All sales are final. Due to the digital nature of this product, purchases are non-refundable. We encourage you to review the product details carefully before purchasing to ensure it's the right fit for you. If you experience any issues, reach out to us at contact@synairo.com.",
   },
   {
     question: "Will the content be updated?",
@@ -29,9 +29,9 @@ const faqs = [
       "AI tools evolve rapidly. We periodically release updated editions. As a buyer, you'll be notified of major updates and may receive discounted access to future editions.",
   },
   {
-    question: "What's the difference between the tiers within each path?",
+    question: "What's the difference between Essentials and Frontier?",
     answer:
-      "Each tier builds on the previous one. Starter gives you the core guide with 2 examples. Growth triples that with 6 examples and expanded tool coverage. Complete gives you everything — 12+ examples, advanced optimization techniques, and bonus content.",
+      "Essentials is your starting point: the core guide with worked examples, tool setup, and prompt templates. Frontier goes deeper into AI-driven architecture, reasoning models, context management, and agentic workflows. Pick the one that matches where you are right now.",
   },
   {
     question: "I have a problem with my purchase. How can I get help?",

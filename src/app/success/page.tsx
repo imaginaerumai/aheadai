@@ -38,7 +38,7 @@ function SuccessContent() {
         if (attempt >= 10) {
           // Give up after ~15 seconds
           setError(
-            "Your purchase is being processed. Check your email for a download link — it should arrive within a few minutes."
+            "Your purchase is being processed. Check your email for a download link - it should arrive within a few minutes."
           );
           setLoading(false);
           return true;

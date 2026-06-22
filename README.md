@@ -16,13 +16,12 @@ Premium AI development guide PDFs sold via Stripe checkout. Built with Next.js, 
 
 ## Products
 
-3 paths, 7 SKUs:
+2 guides:
 
-| Path | Starter | Growth | Complete |
-|------|---------|--------|----------|
-| Essentials | $19 | $39 | $99 |
-| Frontier | $29 | $49 | $99 |
-| **Premium Pack** | | | **$129** |
+| Guide | Price |
+|-------|-------|
+| Essentials | $19 |
+| Frontier | $29 |
 
 All prices have live Stripe price IDs configured in `src/lib/products.ts`.
 
@@ -45,10 +44,10 @@ src/
   components/
     Navbar.tsx                  # Fixed nav with scroll effect
     Hero.tsx                    # Hero section with CTA
-    PathsOverview.tsx           # Essentials vs Frontier path comparison
+    PathsOverview.tsx           # Essentials vs Frontier guide comparison
     Features.tsx                # Feature highlights
-    PricingSection.tsx          # Tabbed pricing (Essentials | Frontier | Premium Pack)
-    PricingCard.tsx             # Individual pricing tier card
+    PricingSection.tsx          # "Start Here" pricing with 2 product cards
+    PricingCard.tsx             # Individual pricing card
     FAQ.tsx                     # Accordion FAQ (includes refund policy)
     Footer.tsx                  # Footer with Synairo copyright + contact
   lib/
@@ -71,33 +70,20 @@ Put your PDF files into the `guides-private/` folder at the project root:
 
 ```
 guides-private/
-  beginner-starter.pdf
-  beginner-growth.pdf
-  beginner-complete.pdf
-  principal-starter.pdf
-  principal-growth.pdf
-  principal-complete.pdf
+  essentials.pdf
+  frontier.pdf
 ```
 
-This folder is **private** — files are NOT served by Next.js and cannot be accessed via URL. They are only served through the authenticated download endpoint after purchase verification.
+This folder is **private** - files are NOT served by Next.js and cannot be accessed via URL. They are only served through the authenticated download endpoint after purchase verification.
 
 ### Step 2: Update the file mapping
 
-Edit `src/app/api/download/route.ts` — the `PRODUCT_FILES` constant at the top of the file:
+Edit `src/app/api/download/route.ts` - the `PRODUCT_FILES` constant at the top of the file:
 
 ```ts
 const PRODUCT_FILES: Record<string, string[]> = {
-  "beginner-starter": ["beginner-starter.pdf"],
-  "beginner-growth": ["beginner-growth.pdf"],
-  "beginner-complete": ["beginner-complete.pdf"],
-  "principal-starter": ["principal-starter.pdf"],
-  "principal-growth": ["principal-growth.pdf"],
-  "principal-complete": ["principal-complete.pdf"],
-  // Bundle: list ALL files — they'll be zipped together automatically
-  "complete-bundle": [
-    "beginner-complete.pdf",
-    "principal-complete.pdf",
-  ],
+  "beginner-starter": ["essentials.pdf"],
+  "principal-starter": ["frontier.pdf"],
 };
 ```
 

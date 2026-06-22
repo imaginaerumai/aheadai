@@ -8,13 +8,7 @@ import JSZip from "jszip";
 // For now all products use the same test PDF — replace with real files
 const PRODUCT_FILES: Record<string, string[]> = {
   "beginner-starter": ["aheadai-sample.pdf"],
-  "beginner-growth": ["aheadai-sample.pdf"],
-  "beginner-complete": ["aheadai-sample.pdf"],
   "principal-starter": ["aheadai-sample.pdf"],
-  "principal-growth": ["aheadai-sample.pdf"],
-  "principal-complete": ["aheadai-sample.pdf"],
-  // Bundle gets all files — when real PDFs exist, list them all here
-  "complete-bundle": ["aheadai-sample.pdf"],
 };
 
 const GUIDES_DIR = join(process.cwd(), "guides-private");
@@ -25,7 +19,7 @@ function errorPage(title: string, message: string, status: number) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} — Ahead AI</title>
+  <title>${title} - Ahead AI</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {

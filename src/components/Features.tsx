@@ -15,7 +15,7 @@ const features = [
     icon: "🧠",
     title: "Beyond Code Generation",
     description:
-      "AI-driven analysis, reasoning, architecture decisions, and project management — not just monkey-code.",
+      "AI-driven analysis, reasoning, architecture decisions, and project management. Not just monkey-code.",
   },
   {
     icon: "💰",

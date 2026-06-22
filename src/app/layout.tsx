@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ahead AI — Master AI Development That Actually Works",
+  title: "Ahead AI - Master AI Development That Actually Works",
   description:
     "Stop copy-pasting ChatGPT responses. Learn to build with AI that delivers razor-sharp, production-ready results. From beginner to principal engineer.",
   keywords: [
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     "agentic workflows",
   ],
   openGraph: {
-    title: "Ahead AI — Master AI Development That Actually Works",
+    title: "Ahead AI - Master AI Development That Actually Works",
     description:
       "Stop copy-pasting ChatGPT responses. Learn AI development that delivers real results.",
     type: "website",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ahead AI — Master AI Development That Actually Works",
+    title: "Ahead AI - Master AI Development That Actually Works",
     description:
       "Stop copy-pasting ChatGPT responses. Learn AI development that delivers real results.",
   },
