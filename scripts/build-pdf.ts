@@ -111,11 +111,11 @@ function buildGuide() {
     chapters.push(html);
   }
 
-  // Build ToC HTML
+  // Build ToC HTML with clickable links
   const tocHtml = tocEntries
     .map(
       (entry) =>
-        `<li class="toc-h${entry.level}">${entry.text}</li>`
+        `<li class="toc-h${entry.level}"><a href="#${entry.id}">${entry.text}</a></li>`
     )
     .join("\n");
 
@@ -171,9 +171,10 @@ function buildGuide() {
 <body>
   <!-- Cover -->
   <div class="cover">
+    <p class="top-label">Stop guessing. Start building.</p>
     <h1>${displayName}</h1>
     <p class="tagline">${tagline}</p>
-    <p class="brand">Ahead <span>AI</span></p>
+    <p class="brand"><a href="https://wholesome-creativity-production.up.railway.app">Ahead <span>AI</span></a></p>
   </div>
 
   <!-- Table of Contents -->
@@ -185,7 +186,9 @@ function buildGuide() {
   </div>
 
   <!-- Chapters -->
-  ${chapters.join("\n\n")}
+  <div class="content">
+    ${chapters.join("\n\n")}
+  </div>
 </body>
 </html>`;
 
@@ -209,20 +212,29 @@ async function generatePdf(html: string, displayName: string) {
   const page = await browser.newPage();
   await page.setContent(html, { waitUntil: "networkidle0" });
 
+  // Remove any broken images (file:// URLs that don't exist)
+  await page.evaluate(() => {
+    document.querySelectorAll("img").forEach((img) => {
+      if (!img.naturalWidth || img.naturalWidth === 0) {
+        img.remove();
+      }
+    });
+  });
+
   await page.pdf({
     path: outputPath,
     format: "A4",
     printBackground: true,
     margin: {
-      top: "25mm",
-      bottom: "25mm",
-      left: "30mm",
-      right: "30mm",
+      top: "0",
+      bottom: "0",
+      left: "0",
+      right: "0",
     },
     displayHeaderFooter: true,
     headerTemplate: "<span></span>",
     footerTemplate: `
-      <div style="width: 100%; font-size: 9px; color: #86868b; padding: 0 30mm; display: flex; justify-content: space-between; font-family: Inter, sans-serif;">
+      <div style="width: 100%; font-size: 9px; color: #86868b; padding: 10mm 30mm; display: flex; justify-content: space-between; font-family: Inter, sans-serif;">
         <span>Ahead AI - ${displayName}</span>
         <span class="pageNumber"></span>
       </div>
